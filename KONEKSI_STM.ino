@@ -1,6 +1,6 @@
-#define PIR_PIN       PA0
-#define TRIG_PIN      PA1
-#define ECHO_PIN      PA4
+#define PIR_PIN       A0
+#define TRIG_PIN      A1
+#define ECHO_PIN      A4
 #define BUZZER_PIN    PB0
 
 long duration;
@@ -40,25 +40,32 @@ void loop() {
     
     Serial.print("Gerakan Terdeteksi! Jarak: ");
     Serial.print(distance);
-    Serial.println(" cm");
+    Serial.print(" cm | ");
 
     if (distance > 0 && distance <= 10) {
-      // Bahaya (Sangat Dekat) -> Bunyi Panjang
+      // Bahaya (Sangat Dekat) -> Bunyi Cepat/Kontinu
+      Serial.println("STATUS: ALARM BAHAYA (Buzzer ON)");
       digitalWrite(BUZZER_PIN, HIGH);
       delay(100);
+      digitalWrite(BUZZER_PIN, LOW); // Tambahkan LOW agar ada kontrol siklus
+      delay(50);
     } 
     else if (distance > 10 && distance <= 30) {
       // Peringatan (Mendekat) -> Bip Lambat
+      Serial.println("STATUS: PERINGATAN (Buzzer Bip)");
       digitalWrite(BUZZER_PIN, HIGH);
       delay(100);
       digitalWrite(BUZZER_PIN, LOW);
       delay(200);
     } 
     else {
+      // Jarak aman (> 30 cm)
+      Serial.println("STATUS: AMAN (Buzzer OFF)");
       digitalWrite(BUZZER_PIN, LOW);
     }
   } 
   else {
+    // Tidak ada gerakan
     digitalWrite(BUZZER_PIN, LOW);
   }
 
